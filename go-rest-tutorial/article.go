@@ -2,6 +2,7 @@ package main
 
 // Article is the struct model
 type Article struct {
+	ID      int
 	Title   string
 	Desc    string
 	Content string

@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 //
@@ -17,7 +19,7 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 	pl("Endpoint Hit: Homepage")
 }
 
-func returnAllArticles(w http.ResponseWriter, r *http.Request) {
+func get(w http.ResponseWriter, r *http.Request) {
 	//mock up the articles
 	articles := Articles{
 		Article{Title: "Hello", Desc: "Article Description", Content: "Article Content"},
@@ -29,13 +31,21 @@ func returnAllArticles(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(articles)
 }
 
+func show(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key := vars["id"]
+	fpf(w, "Key: "+key)
+}
+
 //
 // ──────────────────────────────────────────────────── I ──────────
 //   :::::: R O U T E S : :  :   :    :     :        :          :
 // ──────────────────────────────────────────────────────────────
 //
 func handleRequests() {
-	http.HandleFunc("/", homePage)
-	http.HandleFunc("/all", returnAllArticles)
-	log.Fatal(http.ListenAndServe(":8090", nil))
+	myRouter := mux.NewRouter().StrictSlash(true)
+	myRouter.HandleFunc("/", homePage)
+	myRouter.HandleFunc("/all", get)
+	myRouter.HandleFunc("/articles/{id}", show)
+	log.Fatal(http.ListenAndServe(":8090", myRouter))
 }
