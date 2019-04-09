@@ -3,16 +3,9 @@ package main
 import "fmt"
 
 func main() {
-	limit := getLimit()
-	fmt.Println(limit())
-	limit()
-	fmt.Println(limit())
+	myVariadicFunctions("Heloo", "world")
 }
 
-func getLimit() func() int {
-	limit := 10
-	return func() int {
-		limit--
-		return limit
-	}
+func myVariadicFunctions(args ...string) {
+	fmt.Println(args)
 }
