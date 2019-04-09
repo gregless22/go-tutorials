@@ -1,11 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
+
+var pl = fmt.Println
 
 func main() {
-	myVariadicFunctions("Heloo", "world")
-}
-
-func myVariadicFunctions(args ...string) {
-	fmt.Println(args)
+	pl("Reading Env")
+	databasePass := os.Getenv("DATA_PASS")
+	pl(databasePass)
 }
