@@ -2,11 +2,13 @@ package main
 
 import (
 	"fmt"
+	"sync"
 )
 
 var (
-	pf = fmt.Printf
-	pl = fmt.Println
+	mutex sync.Mutex
+	pf    = fmt.Printf
+	pl    = fmt.Println
 )
 
 func main() {
