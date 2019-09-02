@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/big"
 	"strings"
+	"time"
 )
 
 var (
@@ -28,4 +29,21 @@ func main() {
 
 	bigSum.Add(&b1, &b2).Add(&bigSum, &b3)
 	fmt.Printf("BigSum = %.10g\n", &bigSum)
+
+	// add some data stuff
+	t := time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC)
+	fmt.Printf("Go Launchdate at %s\n", t)
+	now := time.Now()
+
+	fmt.Printf("The time now is %s\n", now)
+
+	fmt.Println("the month is ", t.Month())
+	fmt.Println("the day is ", t.Day())
+	fmt.Println("the weekday is ", t.Weekday())
+
+	tomorrow := t.AddDate(0, 0, 1)
+	fmt.Println("the month is ", tomorrow.Month())
+	fmt.Println("the day is ", tomorrow.Day())
+	fmt.Println("the weekday is ", tomorrow.Weekday())
+
 }
