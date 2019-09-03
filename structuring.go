@@ -2,36 +2,41 @@ package main
 
 import "fmt"
 
-// TODO need to lookat go modules
+// Dog comment
+type Dog struct {
+	Breed  string
+	Weight int
+	Sound  string
+}
+
+// Animal comment
+type Animal interface {
+	Speak()
+}
+
+// Speak comment
+func (d Dog) Speak() {
+	fmt.Println(d.Sound)
+}
+
+// SpeakThreeTimes Comment
+func (d *Dog) SpeakThreeTimes() {
+	d.Sound = fmt.Sprintf("%v! %v! %v!", d.Sound, d.Sound, d.Sound)
+	fmt.Println(d.Sound)
+}
 
 func main() {
-	doSomething()
-	sum := addValues(22, 54)
-	fmt.Println(sum)
+	poodle := Dog{"Poodle", 23, "Woof"}
+	fmt.Println(poodle)
+	poodle.Speak()
 
-	sum = addAllValues(12, 54, 79)
-	fmt.Println(sum)
+	poodle.Sound = "arrf"
+	poodle.Speak()
 
-	n1, l1 := stringutil.FullName("greg", "connolly")
-	fmt.Printf("Fullname: %v, number of chars %v\n", n1, l1)
+	poodle.SpeakThreeTimes()
+	poodle.SpeakThreeTimes()
+	// poodle.SpeakThreeTimes()
 
-	n2, l2 := stringutil.FullNameNakedReturn("fdsagafdg", "gfdsg")
-	fmt.Printf("Fullname: %v, number of chars %v\n", n2, l2)
-}
-
-func doSomething() {
-	fmt.Println("Doing Something")
-}
-
-func addValues(value1, value2 int) int {
-	return value1 + value2
-}
-
-func addAllValues(values ...int) int {
-	sum := 0
-	for i := range values {
-		sum += values[i]
-	}
-	fmt.Printf("%T\n", values)
-	return sum
+	lab := Animal(Dog{"Labrador", 45, "Woof Woof_"})
+	lab.Speak()
 }
