@@ -1,26 +1,45 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
+	"io"
+	"io/ioutil"
+	"log"
+	"strings"
+	"unicode"
+	"unicode/utf8"
 )
 
 func main() {
-	var b = bytes.NewBuffer(make([]byte, 26))
-	var text = []string{
-		`As he came into the window`,
-		`It was the sound of a crescendo
-He came into her apartment`,
-		`He left the bloodstains on the carpet`,
-		`She ran underneath the table
-He could see she was unable
-So she ran into the bedroom`,
+	a := NewAngryReader(strings.NewReader("Hello, playground!"))
+	b, err := ioutil.ReadAll(a)
+	if err != nil {
+		log.Fatalln(err)
 	}
+	log.Println(string(b))
+}
 
-	for i := range text {
-		b.Reset()
-		b.WriteString(text[i])
-		fmt.Println("Length:", b.Len(), "\tCapacity:", b.Cap())
+// NewAngryReader returns a concrete angry reader type
+func NewAngryReader(r io.Reader) *AngryReader {
+	return &AngryReader{r: r}
+}
+
+// AngryReader concrete type
+type AngryReader struct {
+	r io.Reader
+}
+
+func (a *AngryReader) Read(b []byte) (int, error) {
+	n, err := a.r.Read(b)
+	for r, i, w := rune(0), 0, 0; i < n; i += w {
+		r, w = utf8.DecodeRune(b[i:])
+		if !unicode.IsLetter(r) {
+			continue
+		}
+		ru := unicode.ToUpper(r)
+		if wu := utf8.EncodeRune(b[i:], ru); w != wu {
+			return n, fmt.Errorf("%c->%c, size mismatch %d->%d", r, ru, w, wu)
+		}
 	}
-
+	return n, err
 }
