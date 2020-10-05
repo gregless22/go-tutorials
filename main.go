@@ -1,36 +1,26 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
-	"io"
-	"os"
 )
 
 func main() {
-	if len(os.Args) != 2 {
-		fmt.Println("Please specify a file to read")
-		return
+	var b = bytes.NewBuffer(make([]byte, 26))
+	var text = []string{
+		`As he came into the window`,
+		`It was the sound of a crescendo
+He came into her apartment`,
+		`He left the bloodstains on the carpet`,
+		`She ran underneath the table
+He could see she was unable
+So she ran into the bedroom`,
 	}
 
-	f, err := os.Open(os.Args[1])
-	if err != nil {
-		fmt.Println("Error: ", err)
-		return
-	}
-	defer f.Close()
-
-	var (
-		b = make([]byte, 16)
-	)
-
-	for n := 0; err == nil; {
-		n, err = f.Read(b)
-		if err == nil {
-			fmt.Print(string(b[:n]))
-		}
-	}
-	if err != nil && err != io.EOF {
-		fmt.Println("\n\nError: ", err)
+	for i := range text {
+		b.Reset()
+		b.WriteString(text[i])
+		fmt.Println("Length:", b.Len(), "\tCapacity:", b.Cap())
 	}
 
 }
